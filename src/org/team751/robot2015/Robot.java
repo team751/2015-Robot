@@ -1,17 +1,13 @@
 package org.team751.robot2015;
 
-import org.team751.robot2015.commands.ExampleCommand;
 import org.team751.robot2015.subsystems.Drivetrain;
-import org.team751.robot2015.subsystems.ExampleSubsystem;
 import org.team751.robot2015.utils.nav6.frc.IMUAdvanced;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -22,17 +18,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends IterativeRobot {
 
-	public static final ExampleSubsystem	exampleSubsystem	= new ExampleSubsystem();
-	public static Drivetrain				drivetrain;
-	public static OI						oi;
+	public static Drivetrain	drivetrain;
+	public static OI			oi;
 
 	// IMU
-	private SerialPort						serial_port;
-	public static IMUAdvanced				imu;
+	private SerialPort			serial_port;
+	public static IMUAdvanced	imu;
 
-	Command									autonomousCommand;
-	Joystick								joystick			= new Joystick(1);
-	Joystick								joystick2			= new Joystick(2);
+	Command						autonomousCommand;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -40,8 +33,7 @@ public class Robot extends IterativeRobot {
 	 */
 	public void robotInit() {
 		oi = new OI();
-		// instantiate the command used for the autonomous period
-		autonomousCommand = new ExampleCommand();
+		// autonomousCommand = new ExampleCommand();
 
 		drivetrain = new Drivetrain();
 
@@ -76,12 +68,6 @@ public class Robot extends IterativeRobot {
 		drivetrain.rightFront.pidController.enable();
 		drivetrain.rightRear.pidController.enable();
 		drivetrain.leftRear.pidController.enable();
-
-		SmartDashboard.putData("Left Front PID", drivetrain.leftFront.pidController);
-		SmartDashboard.putData("Right Front PID", drivetrain.rightFront.pidController);
-		SmartDashboard.putData("Left Rear PID", drivetrain.leftRear.pidController);
-		SmartDashboard.putData("Right Rear PID", drivetrain.rightRear.pidController);
-
 	}
 
 	/**
@@ -100,51 +86,6 @@ public class Robot extends IterativeRobot {
 	 */
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-
-		// SmartDashboard.putNumber("IMU", this.imu.getYaw());
-
-		SmartDashboard.putNumber("Left Front - ENC", drivetrain.leftFront.encoder.getRate());
-		SmartDashboard.putNumber("Right Front - ENC", drivetrain.rightFront.encoder.getRate());
-		SmartDashboard.putNumber("Left Rear - ENC", drivetrain.leftRear.encoder.getRate());
-		SmartDashboard.putNumber("Right Rear - ENC", drivetrain.rightRear.encoder.getRate());
-
-		// drivetrain.leftFront.pidController.setSetpoint(-20);
-		// drivetrain.rightFront.pidController.setSetpoint(20);
-		// drivetrain.rightRear.pidController.setSetpoint(20);
-		// drivetrain.leftRear.pidController.setSetpoint(-20);
-
-		// drivetrain.rightFront.controller.Set(1.0);
-		// drivetrain.leftFront.controller.Set(1.0);
-		// drivetrain.rightRear.controller.Set(1.0);
-		// drivetrain.leftRear.controller.Set(1.0);
-
-		double x = 0;
-		double y = 0;
-
-		if (joystick.getRawButton(4)) {
-			drivetrain.setSpeedMultiplier(Constants.kSpeedMultiplierA);
-		} else if (joystick.getRawButton(3)) {
-			drivetrain.setSpeedMultiplier(Constants.kSpeedMultiplierB);
-		} else if (joystick.getRawButton(5)) {
-			drivetrain.setSpeedMultiplier(Constants.kSpeedMultiplierC);
-		} else {
-			drivetrain.setSpeedMultiplier(Constants.kSpeedMultiplierDefault);
-		}
-
-		x = joystick.getX();
-		y = joystick.getY();
-
-		if (joystick.getRawButton(2)) y = 0;
-
-		if (this.imu != null) {
-			drivetrain.mecanum(x, y, joystick2.getX() * .25, this.imu.getYaw());
-			SmartDashboard.putBoolean("imu_connected", true);
-			SmartDashboard.putNumber("imu_yaw", this.imu.getYaw());
-		} else {
-			drivetrain.mecanum(x, y, joystick2.getX() * .25, 0);
-			SmartDashboard.putBoolean("imu_connected", false);
-		}
-
 	}
 
 	/**

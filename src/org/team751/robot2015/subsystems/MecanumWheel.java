@@ -1,5 +1,7 @@
 package org.team751.robot2015.subsystems;
 
+import org.team751.robot2015.Constants;
+
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
@@ -17,7 +19,7 @@ public class MecanumWheel {
 		this.name = name;
 		this.controller = new CanTalonSRX(address);
 		this.encoder = new Encoder(encoderA, encoderB);
-		this.encoder.setDistancePerPulse(.02);
+		this.encoder.setDistancePerPulse(Constants.kDistancePerPulse);
 
 		this.pidController = new PIDController(p, i, d, getSource(), getOutput());
 
