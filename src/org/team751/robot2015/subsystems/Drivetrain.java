@@ -24,10 +24,10 @@ public class Drivetrain extends Subsystem {
 	private double		speedMultiplier	= Constants.kSpeedMultiplierDefault;
 
 	public Drivetrain() {
-		leftFront = new MecanumWheel("Left Front", RobotMap.kFrontLeftCAN, RobotMap.kFrontLeftEncoderA, RobotMap.kFrontLeftEncoderB, .003, .00, .00);
-		rightFront = new MecanumWheel("Right Front", RobotMap.kFrontRightCAN, RobotMap.kFrontRightEncoderA, RobotMap.kFrontRightEncoderB, 0.003, .00, .00);
-		leftRear = new MecanumWheel("Left Rear", RobotMap.kRearLeftCAN, RobotMap.kRearLeftEncoderA, RobotMap.kRearLeftEncoderB, 0.003, .00, .000);
-		rightRear = new MecanumWheel("Right Rear", RobotMap.kRearRightCAN, RobotMap.kRearRightEncoderA, RobotMap.kRearRightEncoderB, 0.003, .00, .00);
+		leftFront = new MecanumWheel("Left Front", RobotMap.kFrontLeftCAN, RobotMap.kFrontLeftEncoderA, RobotMap.kFrontLeftEncoderB, .006, .00, .00);
+		rightFront = new MecanumWheel("Right Front", RobotMap.kFrontRightCAN, RobotMap.kFrontRightEncoderA, RobotMap.kFrontRightEncoderB, 0.006, .00, .00);
+		leftRear = new MecanumWheel("Left Rear", RobotMap.kRearLeftCAN, RobotMap.kRearLeftEncoderA, RobotMap.kRearLeftEncoderB, 0.006, .00, .000);
+		rightRear = new MecanumWheel("Right Rear", RobotMap.kRearRightCAN, RobotMap.kRearRightEncoderA, RobotMap.kRearRightEncoderB, 0.006, .00, .00);
 
 		if (!Constants.kBarnMecanumEnabled) setupRobotDrive();
 	}
@@ -49,10 +49,10 @@ public class Drivetrain extends Subsystem {
 
 	public void barnMecanum(double x, double y, double rotation, double angle) {
 		BarnMecanumOutput output = BarnMecanum.mecanum(x, y, rotation, angle);
-		leftFront.pidController.setSetpoint(-getSpeedMultiplier() * output.leftFrontSpeed);
-		leftRear.pidController.setSetpoint(-getSpeedMultiplier() * output.leftRearSpeed);
-		rightFront.pidController.setSetpoint(getSpeedMultiplier() * output.rightFrontSpeed);
-		rightRear.pidController.setSetpoint(getSpeedMultiplier() * output.rightRearSpeed);
+		leftFront.pidController.setSetpoint(getSpeedMultiplier() * output.leftFrontSpeed);
+		leftRear.pidController.setSetpoint(getSpeedMultiplier() * output.leftRearSpeed);
+		rightFront.pidController.setSetpoint(-getSpeedMultiplier() * output.rightFrontSpeed);
+		rightRear.pidController.setSetpoint(-getSpeedMultiplier() * output.rightRearSpeed);
 	}
 
 	public void updateSmartDashboard(double x, double y, double rotation, double angle) {

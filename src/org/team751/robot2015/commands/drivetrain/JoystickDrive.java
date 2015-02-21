@@ -26,23 +26,27 @@ public class JoystickDrive extends Command {
 		updateSpeedMultiplier();
 
 		// Set default values for mecanum
-		double x = Robot.oi.joystick.getX();
-		double y = Robot.oi.joystick.getY();
-		double rotation = Robot.oi.joystick2.getX() * Constants.kAngleJoystickMultiplier;
+		double x = Robot.oi.driveStick.getX();
+		double y = Robot.oi.driveStick.getY();
+		double rotation = Robot.oi.driveStick2.getX() * Constants.kAngleJoystickMultiplier;
 		double angle = 0.0;
 
 		// Handle gyro
-		if (Robot.imu != null) angle = Robot.imu.getYaw();
+		if (Robot.getImu() != null && Constants.kFieldOrientedDriveEnabled) angle = Robot.getImu().getYaw();
 
 		// Handle straight strafe mode
-		boolean straightStrafe = Robot.oi.joystick.getRawButton(2);
+		boolean straightStrafe = Robot.oi.driveStick.getRawButton(1);
 		if (straightStrafe) y = 0;
 		if (straightStrafe && Constants.kDisableRotationOnStraightStrafe) rotation = 0.0;
 
+		// Handle disabled FoD
+		boolean nonFoD = Robot.oi.driveStick.getRawButton(2);
+		if (nonFoD) angle = 0;
+
 		// Handle exponential drive
 		if (Constants.kExponentialDriveEnabled) {
-			y = y * y;
-			x = x * x;
+			y = Math.abs(y) * y;
+			x = Math.abs(x) * x;
 		}
 
 		// Call mecanum method
@@ -50,7 +54,7 @@ public class JoystickDrive extends Command {
 
 		// Update SmartDashboard gyro info
 		SmartDashboard.putNumber("imu_yaw", angle);
-		SmartDashboard.putBoolean("imu_connected", (Robot.imu != null));
+		SmartDashboard.putBoolean("imu_connected", (Robot.getImu() != null));
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
@@ -68,11 +72,11 @@ public class JoystickDrive extends Command {
 	}
 
 	protected void updateSpeedMultiplier() {
-		if (Robot.oi.joystick.getRawButton(4)) {
+		if (Robot.oi.driveStick.getRawButton(4)) {
 			Robot.drivetrain.setSpeedMultiplier(Constants.kSpeedMultiplierA);
-		} else if (Robot.oi.joystick.getRawButton(3)) {
+		} else if (Robot.oi.driveStick.getRawButton(3)) {
 			Robot.drivetrain.setSpeedMultiplier(Constants.kSpeedMultiplierB);
-		} else if (Robot.oi.joystick.getRawButton(5)) {
+		} else if (Robot.oi.driveStick.getRawButton(5)) {
 			Robot.drivetrain.setSpeedMultiplier(Constants.kSpeedMultiplierC);
 		} else {
 			Robot.drivetrain.setSpeedMultiplier(Constants.kSpeedMultiplierDefault);
