@@ -71,7 +71,7 @@ public class Robot extends IterativeRobot {
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
 
-		updateLighting();
+		updateLighting(true);
 
 		// Enumeration e;
 		// try {
@@ -97,7 +97,7 @@ public class Robot extends IterativeRobot {
 
 		autonomousCommand.start();
 
-		Lighting.setColor(Lighting.LEDColor.PURPLE);
+		Lighting.setColor(Lighting.LEDColor.PURPLE, true);
 	}
 
 	/**
@@ -123,10 +123,10 @@ public class Robot extends IterativeRobot {
 
 		joystickGrabber.start();
 
-		if (!DriverStation.getInstance().isFMSAttached())
-			Lighting.setColor(Lighting.LEDColor.GREEN);
-		else
-			updateLighting();
+		// if (!DriverStation.getInstance().isFMSAttached())
+		Lighting.setColor(Lighting.LEDColor.GREEN);
+		// else
+		// updateLighting();
 	}
 
 	/**
@@ -155,6 +155,11 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData("Fixed Grabber PID", fixedGrabber.pidController);
 		SmartDashboard.putNumber("grabFIX", fixedGrabber.controller.get());
 		SmartDashboard.putNumber("grabMOB", mobileGrabber.controller.get());
+
+		if (!fixedGrabber.pidController.onTarget() || mobileGrabber.pidController.onTarget())
+			Lighting.setColor(Lighting.LEDColor.YELLOW);
+		else
+			Lighting.setColor(Lighting.LEDColor.GREEN);
 	}
 
 	/**
@@ -164,14 +169,14 @@ public class Robot extends IterativeRobot {
 		LiveWindow.run();
 	}
 
-	private void updateLighting() {
+	private void updateLighting(boolean override) {
 		if (!DriverStation.getInstance().isDSAttached())
-			Lighting.setColor(Lighting.LEDColor.WHITE);
+			Lighting.setColor(Lighting.LEDColor.WHITE, override);
 		else if (DriverStation.getInstance().getAlliance() == DriverStation.Alliance.Blue)
-			Lighting.setColor(Lighting.LEDColor.BLUE);
+			Lighting.setColor(Lighting.LEDColor.BLUE, override);
 		else if (DriverStation.getInstance().getAlliance() == DriverStation.Alliance.Red)
-			Lighting.setColor(Lighting.LEDColor.RED);
-		else if (DriverStation.getInstance().getAlliance() == DriverStation.Alliance.Invalid) Lighting.setColor(Lighting.LEDColor.WHITE);
+			Lighting.setColor(Lighting.LEDColor.RED, override);
+		else if (DriverStation.getInstance().getAlliance() == DriverStation.Alliance.Invalid) Lighting.setColor(Lighting.LEDColor.WHITE, override);
 	}
 
 	private void setupIMU() {

@@ -9,7 +9,15 @@ public class Lighting {
 		RED, GREEN, BLUE, ORANGE, YELLOW, PURPLE, WHITE, OFF
 	};
 
+	public static LEDColor	currentColor;
+
 	public static void setColor(LEDColor color) {
+		setColor(color, false);
+	}
+
+	public static void setColor(LEDColor color, boolean override) {
+		if (color == currentColor && !override) return;
+		currentColor = color;
 		URL url;
 		try {
 			url = new URL("http://10.7.51.50/" + color.name().toLowerCase());
