@@ -38,7 +38,7 @@ public class Autonomous extends Command {
 
 	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
-		return timer.get() > 2.0;
+		return timer.get() > 2.5;
 	}
 
 	// Called once after isFinished returns true

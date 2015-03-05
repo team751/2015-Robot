@@ -15,6 +15,8 @@ public class Grabber extends Subsystem {
 	public AnalogInput		potentiometer;
 	public PIDController	pidController;
 
+	private boolean			eStopped	= false;
+
 	public Grabber(int address, int potentiometerChannel, double p, double i, double d) {
 		this.controller = new TalonSRX(address);
 		this.potentiometer = new AnalogInput(potentiometerChannel);
@@ -24,7 +26,10 @@ public class Grabber extends Subsystem {
 	}
 
 	public void setWidth(double width) {
-		this.pidController.setSetpoint(width);
+		if (eStopped)
+			this.pidController.disable();
+		else
+			this.pidController.setSetpoint(width);
 	}
 
 	public double getPIDValue() {
@@ -59,7 +64,16 @@ public class Grabber extends Subsystem {
 	}
 
 	public void emergencyStop() {
+		eStopped = true;
 		this.pidController.disable();
 		this.controller.set(0.0);
+	}
+
+	public void unEmergencyStop() {
+		eStopped = false;
+	}
+
+	public boolean isEmergencyStopped() {
+		return this.eStopped;
 	}
 }

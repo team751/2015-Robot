@@ -7,7 +7,6 @@ import org.team751.robot2015.subsystems.Elevator;
 import org.team751.robot2015.subsystems.Grabber;
 import org.team751.robot2015.utils.lighting.Lighting;
 import org.team751.robot2015.utils.nav6.frc.IMUAdvanced;
-import org.team751.robot2015.utils.position_server.PositionServer;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -17,36 +16,26 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-/**
- * The VM is configured to automatically run this class, and to call the
- * functions corresponding to each mode, as described in the IterativeRobot
- * documentation. If you change the name of this class or the package after
- * creating this project, you must also update the manifest file in the resource
- * directory.
- */
 public class Robot extends IterativeRobot {
 
-	public static Drivetrain		drivetrain;
-	public static Elevator			elevator;
-	public static Grabber			mobileGrabber;
-	public static Grabber			fixedGrabber;
-	public static OI				oi;
-	public static PositionServer	positionServer;
+	public static Drivetrain	drivetrain;
+	public static Elevator		elevator;
+	public static Grabber		mobileGrabber;
+	public static Grabber		fixedGrabber;
+	public static OI			oi;
 
 	// IMU
-	private SerialPort				serial_port;
-	private static IMUAdvanced		imu;
+	private SerialPort			serial_port;
+	private static IMUAdvanced	imu;
 
-	Command							autonomousCommand	= new Autonomous();
-	public static Command			joystickGrabber;
+	Command						autonomousCommand	= new Autonomous();
+	public static Command		joystickGrabber;
 
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
 	 */
 	public void robotInit() {
-		// autonomousCommand = new ExampleCommand();
-
 		drivetrain = new Drivetrain();
 		elevator = new Elevator();
 		mobileGrabber = new Grabber(RobotMap.kMobileGrabberPWM, RobotMap.kMobileGrabberPotentiometerInput, 0.35, 0.0, 0.08);
@@ -59,40 +48,17 @@ public class Robot extends IterativeRobot {
 		setupIMU();
 
 		Robot.getImu().zeroYaw();
-		// SmartDashboard.putNumber("mobile grabber speed", .2);
 
 		Lighting.setColor(Lighting.LEDColor.WHITE);
-
-		positionServer = new PositionServer();
-		Thread positionServerThread = new Thread(positionServer);
-		positionServerThread.start();
 	}
 
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
 
 		updateLighting(true);
-
-		// Enumeration e;
-		// try {
-		// e = NetworkInterface.getNetworkInterfaces();
-		// while (e.hasMoreElements()) {
-		// NetworkInterface n = (NetworkInterface) e.nextElement();
-		// Enumeration ee = n.getInetAddresses();
-		// while (ee.hasMoreElements()) {
-		// InetAddress i = (InetAddress) ee.nextElement();
-		// System.out.println(i.getHostAddress());
-		// }
-		// }
-		// } catch (SocketException e1) {
-		// // TODO Auto-generated catch block
-		// e1.printStackTrace();
-		// }
-
 	}
 
 	public void autonomousInit() {
-		// schedule the autonomous command (example)
 		Robot.getImu().zeroYaw();
 
 		autonomousCommand.start();
@@ -105,15 +71,9 @@ public class Robot extends IterativeRobot {
 	 */
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
-
-		// SmartDashboard.putBoolean("LIMIT SWITCH", button.get());
 	}
 
 	public void teleopInit() {
-		// This makes sure that the autonomous stops running when
-		// teleop starts running. If you want the autonomous to
-		// continue until interrupted by another command, remove
-		// this line or comment it out.
 		if (autonomousCommand != null) autonomousCommand.cancel();
 
 		drivetrain.leftFront.pidController.enable();
@@ -146,9 +106,6 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
 
-		// elevator.controller.Set(SmartDashboard.getNumber("mobile grabber speed",
-		// .3));
-
 		SmartDashboard.putNumber("Fixed Grabber Potentiometer NV", fixedGrabber.potentiometer.getAverageValue() / 100.0);
 		SmartDashboard.putNumber("Mobile Grabber Potentiometer NV", mobileGrabber.potentiometer.getAverageValue() / 100.0);
 		SmartDashboard.putData("Mobile Grabber PID", mobileGrabber.pidController);
@@ -156,10 +113,11 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("grabFIX", fixedGrabber.controller.get());
 		SmartDashboard.putNumber("grabMOB", mobileGrabber.controller.get());
 
-		if (!fixedGrabber.pidController.onTarget() || mobileGrabber.pidController.onTarget())
+		if (!fixedGrabber.pidController.onTarget() || !mobileGrabber.pidController.onTarget()) {
 			Lighting.setColor(Lighting.LEDColor.YELLOW);
-		else
+		} else {
 			Lighting.setColor(Lighting.LEDColor.GREEN);
+		}
 	}
 
 	/**
@@ -180,14 +138,8 @@ public class Robot extends IterativeRobot {
 	}
 
 	private void setupIMU() {
-		// if (!Constants.kImuEnabled) return;
 		try {
 			serial_port = new SerialPort(57600, SerialPort.Port.kUSB);
-
-			// You can add a second parameter to modify the
-			// update rate (in hz) from 4 to 100. The default is 100.
-			// If you need to minimize CPU load, you can set it to a
-			// lower value, as shown here, depending upon your needs.
 
 			byte update_rate_hz = 50;
 			setImu(new IMUAdvanced(serial_port, update_rate_hz));

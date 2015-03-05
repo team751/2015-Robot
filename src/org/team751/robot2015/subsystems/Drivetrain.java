@@ -6,6 +6,7 @@ import org.team751.robot2015.commands.drivetrain.JoystickDrive;
 import org.team751.robot2015.utils.mecanum.BarnMecanum;
 import org.team751.robot2015.utils.mecanum.BarnMecanumOutput;
 
+import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -14,14 +15,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  *
  */
 public class Drivetrain extends Subsystem {
-	public MecanumWheel	leftFront;
-	public MecanumWheel	rightFront;
-	public MecanumWheel	leftRear;
-	public MecanumWheel	rightRear;
+	public MecanumWheel		leftFront;
+	public MecanumWheel		rightFront;
+	public MecanumWheel		leftRear;
+	public MecanumWheel		rightRear;
 
-	private RobotDrive	robotDrive;
+	public PIDController	anglePIDController;
 
-	private double		speedMultiplier	= Constants.kSpeedMultiplierDefault;
+	private RobotDrive		robotDrive;
+
+	private double			speedMultiplier	= Constants.kSpeedMultiplierDefault;
 
 	public Drivetrain() {
 		leftFront = new MecanumWheel("Left Front", RobotMap.kFrontLeftCAN, RobotMap.kFrontLeftEncoderA, RobotMap.kFrontLeftEncoderB, .006, .00, .00);
@@ -33,11 +36,14 @@ public class Drivetrain extends Subsystem {
 	}
 
 	public void mecanum(double x, double y, double rotation) {
-		double angle = 0.0;
-		robotDrive.mecanumDrive_Cartesian(x, y, rotation, angle);
+		robotDrive.mecanumDrive_Cartesian(x, y, rotation, 0.0);
 	}
 
 	public void mecanum(double x, double y, double rotation, double angle) {
+		mecanum(x, y, rotation, angle, false);
+	}
+
+	public void mecanum(double x, double y, double rotation, double angle, boolean override) {
 		if (Constants.kBarnMecanumEnabled) {
 			barnMecanum(x, y, rotation, angle);
 		} else {
