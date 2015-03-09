@@ -30,10 +30,22 @@ public class Autonomous extends Command {
 		Robot.drivetrain.leftRear.pidController.enable();
 		Robot.drivetrain.rightRear.pidController.enable();
 
+		// if (timer.get() < 2.5) {
+		// Robot.elevator.controller.Set(-.5);
+		// } else if (timer.get() < 3.0) {
+		// Robot.elevator.controller.Set(1.0);
+		// } else if (timer.get() < 4.5) {
+		// Robot.elevator.controller.Set(0);
+		// Robot.drivetrain.leftFront.pidController.setSetpoint(-15);
+		// Robot.drivetrain.rightFront.pidController.setSetpoint(-15);
+		// Robot.drivetrain.leftRear.pidController.setSetpoint(-15);
+		// Robot.drivetrain.rightRear.pidController.setSetpoint(-15);
+		// } else if (timer.get() < 7.0) {
 		Robot.drivetrain.leftFront.pidController.setSetpoint(-15);
 		Robot.drivetrain.rightFront.pidController.setSetpoint(15);
 		Robot.drivetrain.leftRear.pidController.setSetpoint(-15);
 		Robot.drivetrain.rightRear.pidController.setSetpoint(15);
+		// }
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
@@ -47,6 +59,9 @@ public class Autonomous extends Command {
 		Robot.drivetrain.rightFront.pidController.setSetpoint(0);
 		Robot.drivetrain.leftRear.pidController.setSetpoint(0);
 		Robot.drivetrain.rightRear.pidController.setSetpoint(0);
+
+		Robot.elevator.controller.Set(0);
+
 		//
 		// Robot.drivetrain.leftFront.controller.Set(0);
 		// Robot.drivetrain.leftRear.controller.Set(0);

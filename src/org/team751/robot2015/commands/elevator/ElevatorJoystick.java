@@ -1,6 +1,7 @@
 package org.team751.robot2015.commands.elevator;
 
 import org.team751.robot2015.Robot;
+import org.team751.robot2015.commands.autonomous.SetAnglePoorly;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -24,7 +25,14 @@ public class ElevatorJoystick extends Command {
 		Robot.elevator.controller.Set(-Robot.oi.operatorStick.getY());
 
 		if (Robot.oi.operatorStick.getRawButton(7)) {
-			RaiseElevator re = new RaiseElevator();
+			// RaiseElevator re = new RaiseElevator();
+			SetAnglePoorly re = new SetAnglePoorly(5, 135);
+			re.start();
+		}
+
+		if (Robot.oi.operatorStick.getRawButton(8)) {
+			// RaiseElevator re = new RaiseElevator();
+			SetAnglePoorly re = new SetAnglePoorly(-5, -135);
 			re.start();
 		}
 	}

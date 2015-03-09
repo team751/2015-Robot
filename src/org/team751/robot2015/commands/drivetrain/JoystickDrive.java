@@ -39,6 +39,10 @@ public class JoystickDrive extends Command {
 		if (straightStrafe) y = 0;
 		if (straightStrafe && Constants.kDisableRotationOnStraightStrafe) rotation = 0.0;
 
+		// Handle straight drive
+		boolean driveStraight = Robot.oi.driveStick.getRawButton(3);
+		if (driveStraight) x = 0;
+
 		// Handle disabled FoD
 		boolean nonFoD = Robot.oi.driveStick.getRawButton(2);
 		if (nonFoD) angle = 0;
@@ -74,8 +78,6 @@ public class JoystickDrive extends Command {
 	protected void updateSpeedMultiplier() {
 		if (Robot.oi.driveStick.getRawButton(4)) {
 			Robot.drivetrain.setSpeedMultiplier(Constants.kSpeedMultiplierA);
-		} else if (Robot.oi.driveStick.getRawButton(3)) {
-			Robot.drivetrain.setSpeedMultiplier(Constants.kSpeedMultiplierB);
 		} else if (Robot.oi.driveStick.getRawButton(5)) {
 			Robot.drivetrain.setSpeedMultiplier(Constants.kSpeedMultiplierC);
 		} else {

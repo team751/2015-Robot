@@ -24,8 +24,7 @@ public class Lighting {
 			InputStream stream = url.openStream();
 			stream.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 	}
 

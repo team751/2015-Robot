@@ -21,6 +21,7 @@ public class Grabber extends Subsystem {
 		this.controller = new TalonSRX(address);
 		this.potentiometer = new AnalogInput(potentiometerChannel);
 		this.pidController = new PIDController(p, i, d, getSource(), getOutput());
+		this.pidController.setAbsoluteTolerance(.5);
 
 		// this.potentiometer.setGlobalSampleRate(500);
 	}

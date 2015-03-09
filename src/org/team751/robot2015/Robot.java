@@ -28,7 +28,7 @@ public class Robot extends IterativeRobot {
 	private SerialPort			serial_port;
 	private static IMUAdvanced	imu;
 
-	Command						autonomousCommand	= new Autonomous();
+	Command						autonomousCommand;
 	public static Command		joystickGrabber;
 
 	/**
@@ -42,6 +42,8 @@ public class Robot extends IterativeRobot {
 		fixedGrabber = new Grabber(RobotMap.kFixedGrabberPWM, RobotMap.kFixedGrabberPotentiometerInput, 0.6, 0.004, 0.07);
 
 		joystickGrabber = new JoystickGrabber();
+
+		autonomousCommand = new Autonomous();
 
 		oi = new OI();
 
@@ -118,6 +120,9 @@ public class Robot extends IterativeRobot {
 		} else {
 			Lighting.setColor(Lighting.LEDColor.GREEN);
 		}
+
+		SmartDashboard.putNumber("IMU", Robot.getImu().getYaw());
+
 	}
 
 	/**
