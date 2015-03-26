@@ -1,6 +1,7 @@
 package org.team751.robot2015.subsystems;
 
 import org.team751.robot2015.Constants;
+import org.team751.robot2015.Robot;
 import org.team751.robot2015.RobotMap;
 import org.team751.robot2015.commands.drivetrain.JoystickDrive;
 import org.team751.robot2015.utils.mecanum.BarnMecanum;
@@ -15,22 +16,26 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  *
  */
 public class Drivetrain extends Subsystem {
-	public MecanumWheel		leftFront;
-	public MecanumWheel		rightFront;
-	public MecanumWheel		leftRear;
-	public MecanumWheel		rightRear;
+	public MecanumWheel				leftFront;
+	public MecanumWheel				rightFront;
+	public MecanumWheel				leftRear;
+	public MecanumWheel				rightRear;
 
-	public PIDController	anglePIDController;
+	public PIDController			anglePIDController;
+	public AnglePID.GyroPIDOutput	angleOutput		= new AnglePID.GyroPIDOutput();
 
-	private RobotDrive		robotDrive;
+	private RobotDrive				robotDrive;
 
-	private double			speedMultiplier	= Constants.kSpeedMultiplierDefault;
+	private double					speedMultiplier	= Constants.kSpeedMultiplierDefault;
 
 	public Drivetrain() {
 		leftFront = new MecanumWheel("Left Front", RobotMap.kFrontLeftCAN, RobotMap.kFrontLeftEncoderA, RobotMap.kFrontLeftEncoderB, .006, .00, .00);
 		rightFront = new MecanumWheel("Right Front", RobotMap.kFrontRightCAN, RobotMap.kFrontRightEncoderA, RobotMap.kFrontRightEncoderB, 0.006, .00, .00);
 		leftRear = new MecanumWheel("Left Rear", RobotMap.kRearLeftCAN, RobotMap.kRearLeftEncoderA, RobotMap.kRearLeftEncoderB, 0.006, .00, .000);
 		rightRear = new MecanumWheel("Right Rear", RobotMap.kRearRightCAN, RobotMap.kRearRightEncoderA, RobotMap.kRearRightEncoderB, 0.006, .00, .00);
+
+		anglePIDController = new PIDController(0.0, 0.0, 0.0, new AnglePID.GyroPIDSource(Robot.getImu()), angleOutput);
+		anglePIDController.enable();
 
 		if (!Constants.kBarnMecanumEnabled) setupRobotDrive();
 	}

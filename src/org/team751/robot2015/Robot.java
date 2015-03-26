@@ -25,7 +25,7 @@ public class Robot extends IterativeRobot {
 	public static OI			oi;
 
 	// IMU
-	private SerialPort			serial_port;
+	private static SerialPort	serial_port;
 	private static IMUAdvanced	imu;
 
 	Command						autonomousCommand;
@@ -36,6 +36,8 @@ public class Robot extends IterativeRobot {
 	 * used for any initialization code.
 	 */
 	public void robotInit() {
+		setupIMU();
+
 		drivetrain = new Drivetrain();
 		elevator = new Elevator();
 		mobileGrabber = new Grabber(RobotMap.kMobileGrabberPWM, RobotMap.kMobileGrabberPotentiometerInput, 0.35, 0.0, 0.08);
@@ -46,8 +48,6 @@ public class Robot extends IterativeRobot {
 		autonomousCommand = new Autonomous();
 
 		oi = new OI();
-
-		setupIMU();
 
 		Robot.getImu().zeroYaw();
 
@@ -142,7 +142,7 @@ public class Robot extends IterativeRobot {
 		else if (DriverStation.getInstance().getAlliance() == DriverStation.Alliance.Invalid) Lighting.setColor(Lighting.LEDColor.WHITE, override);
 	}
 
-	private void setupIMU() {
+	private static void setupIMU() {
 		try {
 			serial_port = new SerialPort(57600, SerialPort.Port.kUSB);
 
@@ -157,6 +157,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public static IMUAdvanced getImu() {
+		if (imu == null) Robot.setupIMU();
 		return imu;
 	}
 

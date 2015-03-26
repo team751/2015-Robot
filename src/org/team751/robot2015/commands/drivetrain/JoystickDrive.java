@@ -37,7 +37,6 @@ public class JoystickDrive extends Command {
 		// Handle straight strafe mode
 		boolean straightStrafe = Robot.oi.driveStick.getRawButton(1);
 		if (straightStrafe) y = 0;
-		if (straightStrafe && Constants.kDisableRotationOnStraightStrafe) rotation = 0.0;
 
 		// Handle straight drive
 		boolean driveStraight = Robot.oi.driveStick.getRawButton(3);
@@ -48,17 +47,39 @@ public class JoystickDrive extends Command {
 		if (nonFoD) angle = 0;
 
 		// Handle exponential drive
-		if (Constants.kExponentialDriveEnabled) {
+		if (Constants.kDriveMode == Constants.DriveMode.EXPONENTIAL) {
 			y = Math.abs(y) * y;
 			x = Math.abs(x) * x;
 		}
 
+		// Handle logarithmic drive
+		if (Constants.kDriveMode == Constants.DriveMode.LOGARITHMIC) {
+			x = logrithmicize(x);
+			y = logrithmicize(y);
+		}
+
+		if (rotation > Constants.kMinimumAnglePower) {
+			Robot.drivetrain.anglePIDController.setSetpoint(Robot.getImu().getYaw());
+		} else {
+			rotation = Robot.drivetrain.angleOutput.getRotationalPower();
+		}
+
+		SmartDashboard.putNumber("Rotational Power", rotation);
+
 		// Call mecanum method
 		Robot.drivetrain.mecanum(x, y, rotation, angle);
+	}
 
-		// Update SmartDashboard gyro info
-		SmartDashboard.putNumber("imu_yaw", angle);
-		SmartDashboard.putBoolean("imu_connected", (Robot.getImu() != null));
+	// https://www.google.com/#q=(1%2Flog(2))*log(x%2B1.05)
+	private double logrithmicize(double val) {
+		int multiplier = val > 0 ? 1 : -1;
+
+		val = Math.abs(val);
+
+		double offset = 1.05;
+		double k = (1 / Math.log(1 + offset));
+		double v = Math.log(val + offset);
+		return multiplier * k * v;
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
