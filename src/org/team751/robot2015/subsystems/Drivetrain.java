@@ -7,6 +7,7 @@ import org.team751.robot2015.commands.drivetrain.JoystickDrive;
 import org.team751.robot2015.utils.mecanum.BarnMecanum;
 import org.team751.robot2015.utils.mecanum.BarnMecanumOutput;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -20,6 +21,9 @@ public class Drivetrain extends Subsystem {
 	public MecanumWheel				rightFront;
 	public MecanumWheel				leftRear;
 	public MecanumWheel				rightRear;
+
+	public DigitalInput				leftLimitSwitch;
+	public DigitalInput				rightLimitSwitch;
 
 	public PIDController			anglePIDController;
 	public AnglePID.GyroPIDOutput	angleOutput		= new AnglePID.GyroPIDOutput();
@@ -36,6 +40,9 @@ public class Drivetrain extends Subsystem {
 
 		anglePIDController = new PIDController(0.0, 0.0, 0.0, new AnglePID.GyroPIDSource(Robot.getImu()), angleOutput);
 		anglePIDController.enable();
+
+		leftLimitSwitch = new DigitalInput(8);
+		rightLimitSwitch = new DigitalInput(9);
 
 		if (!Constants.kBarnMecanumEnabled) setupRobotDrive();
 	}

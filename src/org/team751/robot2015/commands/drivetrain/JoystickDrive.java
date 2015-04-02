@@ -57,6 +57,8 @@ public class JoystickDrive extends Command {
 			x = logrithmicize(x);
 			y = logrithmicize(y);
 		}
+		
+		
 
 		if (rotation > Constants.kMinimumAnglePower) {
 			Robot.drivetrain.anglePIDController.setSetpoint(Robot.getImu().getYaw());
