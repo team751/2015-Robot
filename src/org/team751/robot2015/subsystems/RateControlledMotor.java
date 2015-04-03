@@ -48,9 +48,9 @@ public class RateControlledMotor implements PIDOutput {
 		rateOutput = Math.min(1.0, rateOutput);
 		rateOutput = Math.max(-1.0, rateOutput);
 
-		// if (rateOutput > 0 && rateOutput < .15) motor.Set(0.0);
-		// if (rateOutput < 0 && rateOutput > -.15) motor.Set(0.0);
-		// if (!(rateOutput > -.15 && rateOutput < .15))
+		if (rateOutput > 0 && rateOutput < .1) motor.Set(0.0);
+		if (rateOutput < 0 && rateOutput > -.1) motor.Set(0.0);
+
 		motor.Set(-rateOutput);
 
 		speed = rateOutput;

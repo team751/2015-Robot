@@ -22,6 +22,12 @@ public class ElevatorJoystick extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
 		if (Robot.elevator.grabbing) return;
+		// if (Math.abs(Robot.oi.operatorStick.getY()) > .1) {
+		// Lighting.setColor(Lighting.LEDColor.YELLOW);
+		// } else {
+		// Lighting.setColor(Lighting.LEDColor.GREEN);
+		// }
+
 		Robot.elevator.controller.Set(-Robot.oi.operatorStick.getY());
 
 		if (Robot.oi.operatorStick.getRawButton(7)) {

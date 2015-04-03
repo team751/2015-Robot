@@ -15,7 +15,7 @@ public class AnglePID {
 
 		@Override
 		public double pidGet() {
-			if (this.imu != null) return this.imu.getYaw();
+			if (this.imu != null) return (int) this.imu.getYaw() / 2;
 			return 0;
 		}
 	}

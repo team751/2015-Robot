@@ -7,6 +7,8 @@ import org.team751.robot2015.subsystems.Elevator;
 import org.team751.robot2015.subsystems.Grabber;
 import org.team751.robot2015.utils.lighting.Lighting;
 import org.team751.robot2015.utils.nav6.frc.IMUAdvanced;
+import org.team751.robot2015.utils.position_server.PositionServer;
+import org.team751.robot2015.utils.position_server.PositionServerSetupUtility;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -18,18 +20,20 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
 
-	public static Drivetrain	drivetrain;
-	public static Elevator		elevator;
-	public static Grabber		mobileGrabber;
-	public static Grabber		fixedGrabber;
-	public static OI			oi;
+	public static Drivetrain		drivetrain;
+	public static Elevator			elevator;
+	public static Grabber			mobileGrabber;
+	public static Grabber			fixedGrabber;
+	public static OI				oi;
+
+	public static PositionServer	positionServer;
 
 	// IMU
-	private static SerialPort	serial_port;
-	private static IMUAdvanced	imu;
+	private static SerialPort		serial_port;
+	private static IMUAdvanced		imu;
 
-	Command						autonomousCommand;
-	public static Command		joystickGrabber;
+	Command							autonomousCommand;
+	public static Command			joystickGrabber;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -46,6 +50,14 @@ public class Robot extends IterativeRobot {
 		joystickGrabber = new JoystickGrabber();
 
 		autonomousCommand = new Autonomous();
+
+		PositionServerSetupUtility pssu = new PositionServerSetupUtility();
+		Thread pssuThread = new Thread(pssu);
+		pssuThread.start();
+
+		positionServer = new PositionServer();
+		Thread positionServerThread = new Thread(positionServer);
+		positionServerThread.start();
 
 		oi = new OI();
 
@@ -85,6 +97,8 @@ public class Robot extends IterativeRobot {
 
 		joystickGrabber.start();
 
+		Robot.drivetrain.anglePIDController.setSetpoint(Robot.getImu().getYaw() / 10);
+
 		// if (!DriverStation.getInstance().isFMSAttached())
 		Lighting.setColor(Lighting.LEDColor.GREEN);
 		// else
@@ -108,20 +122,9 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
 
-		SmartDashboard.putNumber("Fixed Grabber Potentiometer NV", fixedGrabber.potentiometer.getAverageValue() / 100.0);
-		SmartDashboard.putNumber("Mobile Grabber Potentiometer NV", mobileGrabber.potentiometer.getAverageValue() / 100.0);
-		SmartDashboard.putData("Mobile Grabber PID", mobileGrabber.pidController);
-		SmartDashboard.putData("Fixed Grabber PID", fixedGrabber.pidController);
-		SmartDashboard.putNumber("grabFIX", fixedGrabber.controller.get());
-		SmartDashboard.putNumber("grabMOB", mobileGrabber.controller.get());
-
-		if (!fixedGrabber.pidController.onTarget() || !mobileGrabber.pidController.onTarget()) {
-			Lighting.setColor(Lighting.LEDColor.YELLOW);
-		} else {
-			Lighting.setColor(Lighting.LEDColor.GREEN);
-		}
-
-		SmartDashboard.putNumber("IMU", Robot.getImu().getYaw());
+		SmartDashboard.putData("Angle PID", drivetrain.anglePIDController);
+		SmartDashboard.putData("Height PID cont", elevator.heightPIDController);
+		SmartDashboard.putNumber("IMU", (int) Robot.getImu().getYaw() / 2);
 
 	}
 

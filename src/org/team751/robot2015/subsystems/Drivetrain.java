@@ -21,6 +21,9 @@ public class Drivetrain extends Subsystem {
 	public MecanumWheel				leftRear;
 	public MecanumWheel				rightRear;
 
+	// public DigitalInput leftLimitSwitch;
+	// public DigitalInput rightLimitSwitch;
+
 	public PIDController			anglePIDController;
 	public AnglePID.GyroPIDOutput	angleOutput		= new AnglePID.GyroPIDOutput();
 
@@ -29,13 +32,18 @@ public class Drivetrain extends Subsystem {
 	private double					speedMultiplier	= Constants.kSpeedMultiplierDefault;
 
 	public Drivetrain() {
-		leftFront = new MecanumWheel("Left Front", RobotMap.kFrontLeftCAN, RobotMap.kFrontLeftEncoderA, RobotMap.kFrontLeftEncoderB, .006, .00, .00);
-		rightFront = new MecanumWheel("Right Front", RobotMap.kFrontRightCAN, RobotMap.kFrontRightEncoderA, RobotMap.kFrontRightEncoderB, 0.006, .00, .00);
-		leftRear = new MecanumWheel("Left Rear", RobotMap.kRearLeftCAN, RobotMap.kRearLeftEncoderA, RobotMap.kRearLeftEncoderB, 0.006, .00, .000);
-		rightRear = new MecanumWheel("Right Rear", RobotMap.kRearRightCAN, RobotMap.kRearRightEncoderA, RobotMap.kRearRightEncoderB, 0.006, .00, .00);
+		leftFront = new MecanumWheel("Left Front", RobotMap.kFrontLeftCAN, RobotMap.kFrontLeftEncoderA, RobotMap.kFrontLeftEncoderB, .003, .00, .00);
+		rightFront = new MecanumWheel("Right Front", RobotMap.kFrontRightCAN, RobotMap.kFrontRightEncoderA, RobotMap.kFrontRightEncoderB, 0.003, .00, .00);
+		leftRear = new MecanumWheel("Left Rear", RobotMap.kRearLeftCAN, RobotMap.kRearLeftEncoderA, RobotMap.kRearLeftEncoderB, 0.003, .00, .000);
+		rightRear = new MecanumWheel("Right Rear", RobotMap.kRearRightCAN, RobotMap.kRearRightEncoderA, RobotMap.kRearRightEncoderB, 0.003, .00, .00);
 
-		anglePIDController = new PIDController(0.0, 0.0, 0.0, new AnglePID.GyroPIDSource(Robot.getImu()), angleOutput);
-		anglePIDController.enable();
+		anglePIDController = new PIDController(.01, 0.00, .0, new AnglePID.GyroPIDSource(Robot.getImu()), angleOutput);
+		anglePIDController.setAbsoluteTolerance(1);
+		anglePIDController.setSetpoint(Robot.getImu().getYaw() / 10);
+		// anglePIDController.enable();
+
+		// leftLimitSwitch = new DigitalInput(8);
+		// rightLimitSwitch = new DigitalInput(9);
 
 		if (!Constants.kBarnMecanumEnabled) setupRobotDrive();
 	}

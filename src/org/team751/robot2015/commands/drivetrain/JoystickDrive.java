@@ -26,20 +26,35 @@ public class JoystickDrive extends Command {
 		updateSpeedMultiplier();
 
 		// Set default values for mecanum
-		double x = Robot.oi.driveStick.getX();
-		double y = Robot.oi.driveStick.getY();
-		double rotation = Robot.oi.driveStick2.getX() * Constants.kAngleJoystickMultiplier;
+		// double x = Robot.oi.driveStick.getX();
+		// double y = Robot.oi.driveStick.getY();
+
+		double x = Robot.oi.driveController.getRawAxis(4);
+		double y = Robot.oi.driveController.getRawAxis(5);
+
+		// x += .068;
+		// y += .068;
+		// if (x > 0 && x < 0.05) x = 0;
+		// if (x < 0 && x > -0.05) x = 0;
+		// if (y > 0 && y < 0.05) y = 0;
+		// if (y < 0 && y > -0.05) y = 0;
+
+		// double rotation = Robot.oi.driveStick2.getX() *
+		// Constants.kAngleJoystickMultiplier;
+		double rotation = Robot.oi.driveController.getRawAxis(0) * Constants.kAngleJoystickMultiplier;
 		double angle = 0.0;
 
 		// Handle gyro
 		if (Robot.getImu() != null && Constants.kFieldOrientedDriveEnabled) angle = Robot.getImu().getYaw();
 
 		// Handle straight strafe mode
-		boolean straightStrafe = Robot.oi.driveStick.getRawButton(1);
+		// boolean straightStrafe = Robot.oi.driveStick.getRawButton(1);
+		boolean straightStrafe = Robot.oi.driveController.getRawAxis(2) > .5;
 		if (straightStrafe) y = 0;
 
 		// Handle straight drive
-		boolean driveStraight = Robot.oi.driveStick.getRawButton(3);
+		// boolean driveStraight = Robot.oi.driveStick.getRawButton(3);
+		boolean driveStraight = Robot.oi.driveController.getRawAxis(3) > .5;
 		if (driveStraight) x = 0;
 
 		// Handle disabled FoD
@@ -58,13 +73,29 @@ public class JoystickDrive extends Command {
 			y = logrithmicize(y);
 		}
 
-		if (rotation > Constants.kMinimumAnglePower) {
-			Robot.drivetrain.anglePIDController.setSetpoint(Robot.getImu().getYaw());
+		// Handle Limit Switches
+		// if (Robot.drivetrain.leftLimitSwitch.get() &&
+		// Robot.drivetrain.rightLimitSwitch.get() &&
+		// !Robot.oi.driveStick.getRawButton(10)) {
+		// y = Math.min(0, y);
+		// }
+
+		if (rotation > Constants.kMinimumAnglePower || rotation < -Constants.kMinimumAnglePower) {
+			Robot.drivetrain.anglePIDController.setSetpoint((int) (Robot.getImu().getYaw() / 2));
+			// Robot.drivetrain.anglePIDController.enable();
 		} else {
 			rotation = Robot.drivetrain.angleOutput.getRotationalPower();
 		}
 
 		SmartDashboard.putNumber("Rotational Power", rotation);
+
+		if (x > 0 && x < 0.05) x = 0;
+		if (x < 0 && x > -0.05) x = 0;
+		if (y > 0 && y < 0.05) y = 0;
+		if (y < 0 && y > -0.05) y = 0;
+
+		// x *= -1;
+		// y *= -1;
 
 		// Call mecanum method
 		Robot.drivetrain.mecanum(x, y, rotation, angle);

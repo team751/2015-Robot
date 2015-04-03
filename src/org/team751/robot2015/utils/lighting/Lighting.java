@@ -26,6 +26,16 @@ public class Lighting {
 		} catch (IOException e) {
 			// e.printStackTrace();
 		}
+
+		// Thread lightingRequest = new Thread(new Runnable() {
+
+		// @Override
+		// public void run() {
+		//
+		// }
+		// });
+
+		// lightingRequest.start();
 	}
 
 	public static void disableLEDStrip() {
