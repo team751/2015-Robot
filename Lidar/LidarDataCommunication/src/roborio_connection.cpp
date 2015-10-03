@@ -17,6 +17,9 @@
 // Returns (boolean): returns true if the connection was successfully
 // established or false if an error occurred
 bool RoboRIOConnection::start(std::string host, std::string port) {
+  // Check preconditions
+  if (isOpen()) return false;
+  
   // Create a new socket with IPv4 (AF_INET) that supports datagrams
   // (UDP packets) using the default protocol (0 means use default)
   int roboRIOSocket = socket(AF_INET, SOCK_DGRAM, 0);
