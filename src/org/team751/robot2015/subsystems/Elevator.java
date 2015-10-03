@@ -9,15 +9,16 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.hal.CanTalonSRX;
 
 public class Elevator extends Subsystem {
+	public DigitalInput		toteSensor	= new DigitalInput(9);
 	public CanTalonSRX		controller	= new CanTalonSRX(5);
 	public boolean			grabbing	= false;
 	public int				position	= 0;
 	public PIDController	heightPIDController;
 
-	public DigitalInput		topLimit	= new DigitalInput(8);
+	// public DigitalInput topLimit = new DigitalInput(8);
 
 	public Elevator() {
-		heightPIDController = new PIDController(0.1, 0, 0, new PIDSource() {
+		heightPIDController = new PIDController(0.2, 0, 0, new PIDSource() {
 			@Override
 			public double pidGet() {
 				return position;
@@ -31,7 +32,11 @@ public class Elevator extends Subsystem {
 		});
 
 		heightPIDController.setSetpoint(5);
-		heightPIDController.enable();
+		heightPIDController.setAbsoluteTolerance(1);
+		// heightPIDController.enable();
+
+		// JoystickButton b = new JoystickButton(Robot.oi.driveController, 1);
+		// b.toggleWhenPressed(new AutoGrab());
 	}
 
 	@Override

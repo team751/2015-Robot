@@ -1,4 +1,4 @@
-package org.team751.robot2015.commands.elevator;
+package org.team751.robot2015.commands.drivetrain;
 
 import org.team751.robot2015.Robot;
 
@@ -7,12 +7,12 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class RaiseElevator extends Command {
+public class DriveTilLimitIsPressed extends Command {
 
-	public RaiseElevator() {
+	public DriveTilLimitIsPressed() {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
-		requires(Robot.elevator);
+		requires(Robot.drivetrain);
 	}
 
 	// Called just before this Command runs the first time
@@ -21,17 +21,17 @@ public class RaiseElevator extends Command {
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		Robot.elevator.controller.Set(.75);
+		Robot.drivetrain.mecanum(0, -.5, 0, Robot.getImu().getYaw());
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
-	  return true;
-    // return !Robot.elevator.topLimit.get();
+		return !Robot.drivetrain.leftLimitSwitch.get();
 	}
 
 	// Called once after isFinished returns true
 	protected void end() {
+		Robot.drivetrain.mecanum(0, 0, 0, Robot.getImu().getYaw());
 	}
 
 	// Called when another command which requires one or more of the same

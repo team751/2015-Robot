@@ -22,8 +22,6 @@ public class MecanumWheel {
 		this.encoder.setDistancePerPulse(Constants.kDistancePerPulse);
 
 		this.pidController = new PIDController(p, i, d, getSource(), getOutput());
-
-		// this.pidController.enable();
 	}
 
 	public void showInSmartDashboard() {

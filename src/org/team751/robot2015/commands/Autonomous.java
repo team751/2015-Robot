@@ -1,4 +1,4 @@
-package org.team751.robot2015.commands.drivetrain;
+package org.team751.robot2015.commands;
 
 import org.team751.robot2015.Robot;
 

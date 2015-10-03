@@ -1,5 +1,7 @@
 package org.team751.robot2015;
 
+import org.team751.robot2015.commands.AutoPickupLight;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -15,9 +17,10 @@ public class OI {
 
 	public Joystick	operatorStick	= new Joystick(3);
 
-	Button			eightOperator	= new JoystickButton(operatorStick, 8);
+	Button			operatorTrigger	= new JoystickButton(operatorStick, 1);
 
 	public OI() {
+		operatorTrigger.whileHeld(new AutoPickupLight());
 	}
 	// // CREATING BUTTONS
 	// One type of button is a joystick button which is any button on a

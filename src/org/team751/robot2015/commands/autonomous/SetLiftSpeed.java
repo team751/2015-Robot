@@ -11,14 +11,14 @@ public class SetLiftSpeed extends Command {
 	double	speed;
 
 	public SetLiftSpeed(double speed) {
-		requires(Robot.elevator);
+		// requires(Robot.elevator);
 
 		this.speed = speed;
 	}
 
 	// Called just before this Command runs the first time
 	protected void initialize() {
-
+		Robot.elevator.controller.Set(this.speed);
 	}
 
 	// Called repeatedly when this Command is scheduled to run

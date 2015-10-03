@@ -1,6 +1,6 @@
 package org.team751.robot2015;
 
-import org.team751.robot2015.commands.drivetrain.Autonomous;
+import org.team751.robot2015.commands.Autonomous;
 import org.team751.robot2015.commands.grabber.JoystickGrabber;
 import org.team751.robot2015.subsystems.Drivetrain;
 import org.team751.robot2015.subsystems.Elevator;
@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 
 	public static Drivetrain		drivetrain;
-	public static Elevator			elevator;
+	public static Elevator			elevator	= new Elevator();
 	public static Grabber			mobileGrabber;
 	public static Grabber			fixedGrabber;
 	public static OI				oi;
@@ -43,13 +43,15 @@ public class Robot extends IterativeRobot {
 		setupIMU();
 
 		drivetrain = new Drivetrain();
-		elevator = new Elevator();
 		mobileGrabber = new Grabber(RobotMap.kMobileGrabberPWM, RobotMap.kMobileGrabberPotentiometerInput, 0.35, 0.0, 0.08);
 		fixedGrabber = new Grabber(RobotMap.kFixedGrabberPWM, RobotMap.kFixedGrabberPotentiometerInput, 0.6, 0.004, 0.07);
 
 		joystickGrabber = new JoystickGrabber();
 
+		oi = new OI();
+
 		autonomousCommand = new Autonomous();
+		// autonomousCommand = new AutoPickupLight();
 
 		PositionServerSetupUtility pssu = new PositionServerSetupUtility();
 		Thread pssuThread = new Thread(pssu);
@@ -58,8 +60,6 @@ public class Robot extends IterativeRobot {
 		positionServer = new PositionServer();
 		Thread positionServerThread = new Thread(positionServer);
 		positionServerThread.start();
-
-		oi = new OI();
 
 		Robot.getImu().zeroYaw();
 
@@ -97,7 +97,8 @@ public class Robot extends IterativeRobot {
 
 		joystickGrabber.start();
 
-		Robot.drivetrain.anglePIDController.setSetpoint(Robot.getImu().getYaw() / 10);
+		// Robot.drivetrain.anglePIDController.setSetpoint(Robot.getImu().getYaw()
+		// / 10);
 
 		// if (!DriverStation.getInstance().isFMSAttached())
 		Lighting.setColor(Lighting.LEDColor.GREEN);
@@ -122,9 +123,10 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
 
-		SmartDashboard.putData("Angle PID", drivetrain.anglePIDController);
+		// SmartDashboard.putData("Angle PID", drivetrain.anglePIDController);
 		SmartDashboard.putData("Height PID cont", elevator.heightPIDController);
 		SmartDashboard.putNumber("IMU", (int) Robot.getImu().getYaw() / 2);
+		SmartDashboard.putBoolean("leftLimitSwitch", Robot.drivetrain.leftLimitSwitch.get());
 
 	}
 
