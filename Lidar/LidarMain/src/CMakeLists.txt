@@ -9,6 +9,9 @@ link_directories(${Lidar_SOURCE_DIR}/LidarDataCommunication/src)
 link_directories(${Lidar_SOURCE_DIR}/LidarDataInterperter/src)
 link_directories(${Lidar_SOURCE_DIR}/LidarDataParser/src)
 
+# Set Output Directories
+set(EXECUTABLE_OUTPUT_PATH ../../)
+
 # Define Executables
 add_executable(lidar lidar.cpp)
 
