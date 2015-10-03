@@ -2,16 +2,16 @@
 // lidar code by assembling and sending requests with tote pose information
 //
 // Example:
-//    Communication *roboRIOCommuncation;
-//    if (!roboRIOCommuncation.start("127.0.0.1".to_cstr(), "9999".to_cstr()) {
+//    RoboRIOConnection *roboRIOConnection;
+//    if (!roboRIOConnection.start("127.0.0.1", "9999") {
 //      cerr << "Unable to start connection with RoboRIO" << "\n";
 //    }
 //
-//    if (!roboRIOCommuncation.send(Communication::ToteEndpoint(x, y))) {
+//    if (!roboRIOConnection.send(TotePosePacket::ToteEndpoint(x, y))) {
 //      cerr << "Failed to send packet to RoboRIO" << "\n";
 //    }
 //
-//    roboRIOCommuncation.stop()
+//    roboRIOConnection.stop()
 
 #ifndef LIDAR_LIDARDATACOMMUNICATION_ROBORIOCONNECTION_H_
 #define LIDAR_LIDARDATACOMMUNICATION_ROBORIOCONNECTION_H_
