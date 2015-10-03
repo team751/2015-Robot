@@ -21,9 +21,7 @@
 #include <iostream>
 
 class RoboRIOConnection {
-  public:
-    /* METHODS */
-    
+  public:    
     // Opens a connection to the server if one doesn't already exist
     // Returns (boolean): returns true if the connection was successfully
     // established or false if an error occurred
@@ -42,9 +40,7 @@ class RoboRIOConnection {
     // Returns (boolean): returns true if the message successfully sent
     bool send(TotePosePacket totePacket);
     
-  private:
-    /* VARIABLES */
-    
+  private:    
     // Stores the state of the connection
     bool connectionOpen;
     

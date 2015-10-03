@@ -5,6 +5,7 @@
 #include <stdlib.h>
 
 namespace Constants {
+  // The default timeout value for a request to the RoboRIO
   const static struct timeval defaultTimeoutValue = {
     .tv_sec = 0,
     .tv_usec = 100 * 1000,
