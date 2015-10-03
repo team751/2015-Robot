@@ -1,4 +1,3 @@
-// The data structures used for representing what needs to be send to the RoboRIO
 #ifndef LIDAR_LIDARDATACOMMUNICATION_TOTEPOSEPACKET_H_
 #define LIDAR_LIDARDATACOMMUNICATION_TOTEPOSEPACKET_H_
 

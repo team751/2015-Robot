@@ -1,3 +1,10 @@
+#ifndef LIDAR_LIDARDATACOMMUNICATION_ROBORIOCONNECTION_H_
+#define LIDAR_LIDARDATACOMMUNICATION_ROBORIOCONNECTION_H_
+
+#include "tote_pose_packet.h"
+
+#include <iostream>
+
 // Handles the communication between the RoboRIO and the processor running the
 // lidar code by assembling and sending requests with tote pose information
 //
@@ -12,14 +19,6 @@
 //    }
 //
 //    roboRIOConnection.stop()
-
-#ifndef LIDAR_LIDARDATACOMMUNICATION_ROBORIOCONNECTION_H_
-#define LIDAR_LIDARDATACOMMUNICATION_ROBORIOCONNECTION_H_
-
-#include "tote_pose_packet.h"
-
-#include <iostream>
-
 class RoboRIOConnection {
   public:    
     // Opens a connection to the server if one doesn't already exist

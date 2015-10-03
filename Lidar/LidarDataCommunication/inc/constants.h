@@ -1,9 +1,9 @@
-// Defines constants for use in the LidarDataCommuncation package
 #ifndef LIDAR_LIDARDATACOMMUNICATION_CONSTANTS_H_
 #define LIDAR_LIDARDATACOMMUNICATION_CONSTANTS_H_
 
 #include <stdlib.h>
 
+// Defines constants for use in the LidarDataCommuncation package
 namespace Constants {
   // The default timeout value for a request to the RoboRIO
   const static struct timeval defaultTimeoutValue = {
