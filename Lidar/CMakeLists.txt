@@ -3,4 +3,4 @@ cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
 project(Lidar)
 
 # Subdirs
-subdirs(LidarMain LidarDataCommunication LidarDataInterperter LidarDataParser)
+subdirs(LidarMain LidarDataCommunication LidarDataProcessor LidarSerialDataCollector)

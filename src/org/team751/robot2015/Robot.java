@@ -1,6 +1,6 @@
 package org.team751.robot2015;
 
-import org.team751.robot2015.commands.Autonomous;
+import org.team751.robot2015.commands.AutoPickupLight;
 import org.team751.robot2015.commands.grabber.JoystickGrabber;
 import org.team751.robot2015.subsystems.Drivetrain;
 import org.team751.robot2015.subsystems.Elevator;
@@ -50,7 +50,7 @@ public class Robot extends IterativeRobot {
 
 		oi = new OI();
 
-		autonomousCommand = new Autonomous();
+		autonomousCommand = new AutoPickupLight();
 		// autonomousCommand = new AutoPickupLight();
 
 		PositionServerSetupUtility pssu = new PositionServerSetupUtility();

@@ -1,6 +1,7 @@
 package org.team751.robot2015;
 
 import org.team751.robot2015.commands.AutoPickupLight;
+import org.team751.robot2015.commands.ZeroGyro;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -11,16 +12,18 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
-	public Joystick	driveController	= new Joystick(0);
-	public Joystick	driveStick		= new Joystick(1);
-	public Joystick	driveStick2		= new Joystick(2);
+	public Joystick	driveController		= new Joystick(0);
+	public Joystick	driveStick			= new Joystick(1);
+	public Joystick	driveStick2			= new Joystick(2);
 
-	public Joystick	operatorStick	= new Joystick(3);
+	public Joystick	operatorStick		= new Joystick(3);
 
-	Button			operatorTrigger	= new JoystickButton(operatorStick, 1);
+	Button			operatorTrigger		= new JoystickButton(operatorStick, 1);
+	Button			driverResetButton	= new JoystickButton(driveStick, 6);
 
 	public OI() {
 		operatorTrigger.whileHeld(new AutoPickupLight());
+		driverResetButton.whenPressed(new ZeroGyro());
 	}
 	// // CREATING BUTTONS
 	// One type of button is a joystick button which is any button on a

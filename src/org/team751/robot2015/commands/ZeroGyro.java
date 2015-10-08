@@ -17,7 +17,7 @@ public class ZeroGyro extends Command {
 	// Called just before this Command runs the first time
 	protected void initialize() {
 		Robot.getImu().zeroYaw();
-		Robot.drivetrain.anglePIDController.setSetpoint(0);
+		// Robot.drivetrain.anglePIDController.setSetpoint(0);
 	}
 
 	// Called repeatedly when this Command is scheduled to run
