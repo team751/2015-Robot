@@ -53,9 +53,6 @@ void LidarSerialDataCollector::runMachine() {
     // Setup Serial Port
     serial::Serial serialPort(this->serialPortName, this->baudRate);
 
-    // Stores the current serial packet
-    LidarSerialPacket *serialPacket = NULL;
-
     // An integer used to store the data packet being read
     int currentDataReadIndex;
 

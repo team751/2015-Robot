@@ -9,7 +9,7 @@ cv::Vec4i LidarDataCoordinateConversion::convertCoordinateSystem(cv::Vec4i coord
         cv::Vec4i convertedSystem;
 
         for (int i = 0; i < 4; i++) {
-            convertedSystem[i] = (coordinateSystem[i] * 10) - 3000;
+            convertedSystem[i] = (coordinateSystem[i] + 3000) / 10.0;
         }
 
         return convertedSystem;
@@ -17,7 +17,7 @@ cv::Vec4i LidarDataCoordinateConversion::convertCoordinateSystem(cv::Vec4i coord
         cv::Vec4i convertedSystem;
 
         for (int i = 0; i < 4; i++) {
-            convertedSystem[i] = (coordinateSystem[i] + 3000) / 10;
+            convertedSystem[i] = ((double)coordinateSystem[i] * 10.0) - 3000;
         }
 
         return convertedSystem;
@@ -33,7 +33,7 @@ cv::Vec2d LidarDataCoordinateConversion::convertCoordinateSystem(cv::Vec2d coord
         cv::Vec2d convertedSystem;
 
         for (int i = 0; i < 2; i++) {
-            convertedSystem[i] = (coordinateSystem[i] * 10) - 3000;
+            convertedSystem[i] = (coordinateSystem[i] + 3000) / 10.0;
         }
 
         return convertedSystem;
@@ -41,7 +41,7 @@ cv::Vec2d LidarDataCoordinateConversion::convertCoordinateSystem(cv::Vec2d coord
         cv::Vec2d convertedSystem;
 
         for (int i = 0; i < 2; i++) {
-            convertedSystem[i] = (coordinateSystem[i] + 3000) / 10;
+            convertedSystem[i] = (coordinateSystem[i] * 10.0) - 3000;
         }
 
         return convertedSystem;
@@ -54,9 +54,9 @@ cv::Vec2d LidarDataCoordinateConversion::convertCoordinateSystem(cv::Vec2d coord
 
 double LidarDataCoordinateConversion::convertCoordinateSystem(double value, CoordinateSystem from, CoordinateSystem to) {
     if (from == CoordinateSystem::LidarCoordinateSystem && to == CoordinateSystem::ImageCoordinateSystem) {
-        return (value * 10) - 3000;
+        return (value + 3000.0) / 10.0;
     } else if (from == CoordinateSystem::ImageCoordinateSystem && to == CoordinateSystem::LidarCoordinateSystem) {
-        return (value + 3000) / 10;
+        return (value * 10.0) - 3000;
     } else if (from == to) {
         return value;
     }

@@ -6,32 +6,21 @@
 #define LIDAR_LIDARDATAPROCESSOR_CONSTANTS_H
 
 #include <opencv2/core/types_c.h>
+#include <math.h>
 
 namespace Constants {
-    enum FocalLengthCalculationMethod {Multiplier, Constant};
-
-    const double kRho = 1;
+    const double kRho = .75;
     const double kTheta = CV_PI / 180;
-    const int kThreshold = 30;
-    const double kMinLineLength = 15;
+    const int kThreshold = 20;
+    const double kMinLineLength = 25;
     const double kMaxLineGap = 15;
 
-    const FocalLengthCalculationMethod kFocalLengthCalculationMethod = Multiplier;
-    const double kFocalLength = 1.08;
-    const double kActualLength = 600;
+    const double kFocalLength = 503.194;
+    const double kActualLength = 622.3;
 
-    const double kLengthDeltaThreshold = 300;
+    const double kLengthDeltaThreshold = 120;
 
-    double getFocalLength(double distance) {
-        switch (kFocalLengthCalculationMethod) {
-            case Multiplier:
-                return distance * kFocalLength;
-            case Constant:
-                return kFocalLength;
-            default:
-                return kFocalLength;
-        }
-    }
+    const double kDefaultAngle = -(10.0 * M_PI / 180.0);
 
 }
 

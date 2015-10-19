@@ -24,6 +24,9 @@ public:
     // Return (boolean): true if serial collector is running
     bool isRunning();
 
+    // Stores the current serial packet
+    LidarSerialPacket *serialPacket = NULL;
+
     // Returns a constant copy of the output array
     std::array<double, 360> getOutput() const { return this->output; };
 

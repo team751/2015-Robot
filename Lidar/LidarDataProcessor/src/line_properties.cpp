@@ -5,6 +5,7 @@
 #include "../inc/line_properties.h"
 
 #include "../inc/constants.h"
+#include "../inc/coordinate_conversion.h"
 
 double LineProperties::distanceFromLidar(cv::Vec4i line) {
     double averageX = (line[0] + line[2]) / 2;
@@ -21,11 +22,13 @@ double LineProperties::lengthOfLine(cv::Vec4i line) {
 }
 
 double LineProperties::angleOfLine(cv::Vec4i line) {
-    double angle = M_PI_2 - atan((line[3] - line[1]) / (line[2] - line[0]));
+    if (line[3] == line[1]) return 90.0;
+    if (line[2] == line[0]) return 0.0;
+    double angle = M_PI_2 - atan((double)(line[3] - line[1]) / (double)(line[2] - line[0]));
 
     if (angle > M_PI_2) angle = angle - M_PI;
 
-    return angle;
+    return angle - Constants::kDefaultAngle;
 }
 
 double LineProperties::theoreticalLength(cv::Vec4i line) {
@@ -34,9 +37,12 @@ double LineProperties::theoreticalLength(cv::Vec4i line) {
     // cos(angle) = a * h
 
     double distance = distanceFromLidar(line);
-    double angle = angleOfLine(line);
 
-    return (Constants::kActualLength * distance) / (Constants::getFocalLength(distance) * cos(angle));
+//    std::cout << distance << std::endl;
+//    double angle = angleOfLine(line);
+
+//    return (Constants::kActualLength * distance) / (Constants::getFocalLength(distance) * cos(angle));
+    return (Constants::kActualLength * distance) / (1.08 * distance);
 }
 
 cv::Vec4i LineProperties::fitLineToPoints(pcl::KdTreeFLANN<pcl::PointXYZ> kdtree, pcl::PointCloud<pcl::PointXYZ>::Ptr cloud, cv::Vec4i line) {
